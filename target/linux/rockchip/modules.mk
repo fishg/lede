@@ -76,7 +76,6 @@ define KernelPackage/gpu-lima
   KCONFIG:= \
 	CONFIG_DRM_VGEM \
 	CONFIG_DRM_GEM_CMA_HELPER=y \
-	CONFIG_VIDEO_ROCKCHIP_VDEC=y \
 	CONFIG_DRM_LIMA
   FILES:= \
 	$(LINUX_DIR)/drivers/gpu/drm/vgem/vgem.ko \
@@ -91,3 +90,31 @@ define KernelPackage/gpu-lima/description
 endef
 
 $(eval $(call KernelPackage,gpu-lima))
+
+define KernelPackage/rockchip-vdec
+  SUBMENU:=$(VIDEO_MENU)
+  TITLE:=Rockchip Video Decoder driver
+  DEPENDS:=@TARGET_rockchip +kmod-gpu-lima
+  KCONFIG:= \
+	CONFIG_MEDIA_SUPPORT=y \
+	CONFIG_STAGING=y \
+	CONFIG_STAGING_MEDIA=y \
+	CONFIG_VIDEO_DEV=y \
+	CONFIG_VIDEO_ROCKCHIP_VDEC
+  FILES:= \
+	$(LINUX_DIR)/drivers/staging/media/rkvdec/rockchip-vdec.ko \
+	$(LINUX_DIR)/drivers/media/v4l2-core/v4l2-h264.ko \
+	$(LINUX_DIR)/drivers/media/v4l2-core/v4l2-mem2mem.ko \
+	$(LINUX_DIR)/drivers/media/v4l2-core/v4l2-vp9.ko \
+	$(LINUX_DIR)/drivers/media/common/videobuf2/videobuf2-v4l2.ko \
+	$(LINUX_DIR)/drivers/media/common/videobuf2/videobuf2-dma-contig.ko \
+	$(LINUX_DIR)/drivers/media/common/videobuf2/videobuf2-common.ko \
+	$(LINUX_DIR)/drivers/media/common/videobuf2/videobuf2-memops.ko
+  AUTOLOAD:=$(call AutoProbe,vdec rkvdec)
+endef
+
+define KernelPackage/rockchip-vdec/description
+  Open-source Rockchip Video Decoder driver
+endef
+
+$(eval $(call KernelPackage,rockchip-vdec))
