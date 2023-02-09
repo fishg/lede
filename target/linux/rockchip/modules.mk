@@ -76,6 +76,7 @@ define KernelPackage/gpu-lima
   KCONFIG:= \
 	CONFIG_DRM_VGEM \
 	CONFIG_DRM_GEM_CMA_HELPER=y \
+	CONFIG_VIDEO_ROCKCHIP_VDEC=y \
 	CONFIG_DRM_LIMA
   FILES:= \
 	$(LINUX_DIR)/drivers/gpu/drm/vgem/vgem.ko \
